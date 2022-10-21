@@ -11,7 +11,8 @@
 
 static const int SIZE = sizeof(int)*2;
 static const char* NAME = "ProdConsumnProb";
-static const char* semFullName = "fullA";
-static const char* semEmptyName = "emptyA";
+static const char* semFullName = "full";
+static const char* semEmptyName = "empty";
+static const char* semMutexName = "mutex";
 
 #endif

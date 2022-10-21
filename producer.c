@@ -17,6 +17,7 @@ int main() {
     // Open semaphores
     sem_t *full = sem_open(semFullName, O_CREAT, 0666, 0);
     sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, 1);
+    sem_t *mutex = sem_open(semMutexName, O_CREAT, 0666, 1);
 
     
     int loop = 10;
@@ -24,12 +25,24 @@ int main() {
     printf("\n-PRODUCER PROCESS STARTED-\n");
 
     while(loop--) {
+
+        // Wait for table to be empty
         sem_wait(empty);
         sleep(1);
+
+        // Ensure no processes are in critical section
+        sem_wait(mutex);
+        
+        // CRITICAL SECTION
+
+        // Store random integers in shared memory
         share[0] = rand() % 100;
         share[1] = rand() % 100;
+
         printf("items produced: %d + %d = ?\n", share[0], share[1]);
 
+        // Leave critcial section, signal full
+        sem_post(mutex);
         sem_post(full);
     }
 
@@ -38,9 +51,11 @@ int main() {
     // Close and unlink semaphores
     sem_close(full);
     sem_close(empty);
+    sem_close(mutex);
 
     sem_unlink(semFullName);
     sem_unlink(semEmptyName);
+    sem_unlink(semMutexName);
 
 
     // Close the shared memory object

@@ -9,7 +9,7 @@ int main() {
     ftruncate(fd, SIZE);
 
     // Open and map shared memory object 
-    int *share = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
+    struct table *share = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
     
     if(share == MAP_FAILED){
         printf("Consumer: Mapping Failed\n");
@@ -18,7 +18,7 @@ int main() {
 
     // Open semaphores
     sem_t *full = sem_open(semFullName, O_CREAT, 0666, 0);
-    sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, 1);
+    sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, bufferSize);
     sem_t  *mutex = sem_open(semMutexName, O_CREAT, 0666, 1);
 
     int loop = 10;
@@ -29,16 +29,18 @@ int main() {
 
         // Wait for table to be full
         sem_wait(full);
-        sleep(1);
+        //sleep(rand()%5);
 
         // Ensure no processes are in critical section
         sem_wait(mutex);
         
         // CRITICAL SECTION
-
+        //sleep(rand()%5);
         // Read integers from shared memory and caluclate the sum
-        int result = share[0] + share[1];
-        printf("items consumed: %d + %d = %d\n", share[0], share[1], result);
+        //int result = share->buffer[0] + share->buffer[1];
+        printf("items consumed: %d in pos: %d\n", share->buffer[share->out], share->out);
+
+        share->out = (share->out+1)%bufferSize;
         
         // Leave critical section, signal empty
         sem_post(mutex);

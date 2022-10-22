@@ -8,15 +8,18 @@ int main() {
     ftruncate(fd, SIZE);
 
     // Open and map shared memory object 
-    int *share = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
+    struct table *share = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
     if(share == MAP_FAILED){
         printf("Producer: Mapping Failed\n");
         return 1;
     }
 
+    share->in = 0;
+    share->out = 0;
+
     // Open semaphores
     sem_t *full = sem_open(semFullName, O_CREAT, 0666, 0);
-    sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, 1);
+    sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, bufferSize);
     sem_t *mutex = sem_open(semMutexName, O_CREAT, 0666, 1);
 
     
@@ -28,18 +31,19 @@ int main() {
 
         // Wait for table to be empty
         sem_wait(empty);
-        sleep(1);
+        //sleep(rand()%5);
 
         // Ensure no processes are in critical section
         sem_wait(mutex);
         
         // CRITICAL SECTION
-
+        //sleep(rand()%5);
         // Store random integers in shared memory
-        share[0] = rand() % 100;
-        share[1] = rand() % 100;
+        share->buffer[share->in] = rand() % 100;
 
-        printf("items produced: %d + %d = ?\n", share[0], share[1]);
+        printf("items produced: %d in pos: %d\n", share->buffer[share->in], share->in);
+
+        share->in = (share->in+1)%bufferSize;
 
         // Leave critcial section, signal full
         sem_post(mutex);

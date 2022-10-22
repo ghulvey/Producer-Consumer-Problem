@@ -9,3 +9,7 @@ compile:
 
 run:
 	./producer & ./consumer &
+
+clean:
+	rm ./producer
+	rm ./consumer

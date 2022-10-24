@@ -68,7 +68,7 @@ Each process opens a shared memory object of the same name and size specified in
 
 ### Semaphores
 
-The two process use three semaphores for synronization
+The two process use three semaphores for synronization. Their names are defined in the header file `sharedObj.h`. 
 
 ```
 sem_t *full = sem_open(semFullName, O_CREAT, 0666, 0);

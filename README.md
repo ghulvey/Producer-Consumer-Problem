@@ -32,27 +32,60 @@ Run one of the following commands based on your needs
 
 ```
 -CONSUMER PROCESS STARTED-
+
 -PRODUCER PROCESS STARTED-
-items produced: 83 + 86 = ?
-items consumed: 83 + 86 = 169
-items produced: 77 + 15 = ?
-items consumed: 77 + 15 = 92
-items produced: 93 + 35 = ?
-items consumed: 93 + 35 = 128
-items produced: 86 + 92 = ?
-items consumed: 86 + 92 = 178
-items produced: 49 + 21 = ?
-items consumed: 49 + 21 = 70
-items produced: 62 + 27 = ?
-items consumed: 62 + 27 = 89
-items produced: 90 + 59 = ?
-items consumed: 90 + 59 = 149
-items produced: 63 + 26 = ?
-items consumed: 63 + 26 = 89
-items produced: 40 + 26 = ?
-items consumed: 40 + 26 = 66
-items produced: 72 + 36 = ?
+items produced: 77 in pos: 0
+items produced: 35 in pos: 1
+items consumed: 77 in pos: 0
+items produced: 49 in pos: 0
+items consumed: 35 in pos: 1
+items produced: 27 in pos: 1
+items consumed: 49 in pos: 0
+items produced: 63 in pos: 0
+items consumed: 27 in pos: 1
+items produced: 26 in pos: 1
+items consumed: 63 in pos: 0
+items produced: 11 in pos: 0
+items consumed: 26 in pos: 1
+items consumed: 11 in pos: 0
+items produced: 29 in pos: 1
+items produced: 62 in pos: 0
+items consumed: 29 in pos: 1
+items consumed: 62 in pos: 0
+items produced: 35 in pos: 1
 -PRODUCER PROCESS ENDED-
-items consumed: 72 + 36 = 108
+items consumed: 35 in pos: 1
 -CONSUMER PROCESS ENDED-
+```
+
+## Implementation
+
+Note that `sleep(rand()%x)` was called in both process inside and outside of the critical section to demonstrate that processes are often out of sync. Without this the producer and consumer processes in this project are in near perfect sync.
+
+### Shared Memory
+
+Each process opens a shared memory object of the same name and size specified in the header file `sharedObj.h`. The shared memory is mapped to a `struct table` which has a buffer and the location of the next position to be produced to or consumed from. 
+
+### Semaphores
+
+The two process use three semaphores for synronization
+
+```
+sem_t *full = sem_open(semFullName, O_CREAT, 0666, 0);
+sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, bufferSize);
+sem_t *mutex = sem_open(semMutexName, O_CREAT, 0666, 1);
+```
+
+The `full` semaphore is triggered when the buffer contains data for the consumer to read. The `empty` semaphore is triggered when the buffer has room for items to be added. The `mutex` semaphore ensures mutual exclusion, it asserts that only one process can access the critical section in the case multiple consumer or producer process are running.
+
+### Critical Section
+
+In the producer process data is written to the shared table, and the `in` pointer is advanced to the next avalible space. In the consumer process data is read and outputted to the user from the shared table, and the `out` pointer is advanced to the next data value.
+
+```
+// Store random integers in shared memory
+share->buffer[share->in] = rand() % 100;
+
+// Advance in pointer
+share->in = (share->in+1)%bufferSize;
 ```

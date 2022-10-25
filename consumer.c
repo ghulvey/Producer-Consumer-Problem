@@ -68,6 +68,6 @@ int main() {
     close(fd);
     shm_unlink(NAME);
 
-    exit(0);
+    return 0;
 
 }

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #ifndef _SHAREDOBJ_H
 #define _SHAREDOBJ_H

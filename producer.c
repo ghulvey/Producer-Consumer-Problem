@@ -22,6 +22,9 @@ int main() {
     sem_t *empty = sem_open(semEmptyName, O_CREAT, 0666, bufferSize);
     sem_t *mutex = sem_open(semMutexName, O_CREAT, 0666, 1);
 
+    // Seed random number generator
+    time_t t;
+    srand((unsigned) time(&t));
     
     int loop = 10;
 
@@ -31,19 +34,19 @@ int main() {
 
         // Wait for table to be empty
         sem_wait(empty);
-        //sleep(rand()%5);
+        sleep(rand()%3);
 
         // Ensure no processes are in critical section
         sem_wait(mutex);
         
         // CRITICAL SECTION
-        //sleep(rand()%5);
+        sleep(rand()%3);
         // Store random integers in shared memory
         share->buffer[share->in] = rand() % 100;
 
         printf("items produced: %d in pos: %d\n", share->buffer[share->in], share->in);
 
-        share->in = (share->in+1)%bufferSize;
+        share->in = (share->in+1)%bufferSize; // Goes back to zero when max size is reached
 
         // Leave critcial section, signal full
         sem_post(mutex);
@@ -67,5 +70,5 @@ int main() {
     close(fd);
     shm_unlink(NAME);
 
-    return 0;
+    exit(0);
 }

@@ -34,27 +34,27 @@ Run one of the following commands based on your needs
 -PRODUCER PROCESS STARTED-
 
 -CONSUMER PROCESS STARTED-
-items produced: 52 in pos: 0
-items consumed: 52 in pos: 0
-items produced: 84 in pos: 1
-items produced: 49 in pos: 0
-items consumed: 84 in pos: 1
-items consumed: 49 in pos: 0
-items produced: 20 in pos: 1
-items consumed: 20 in pos: 1
-items produced: 99 in pos: 0
-items produced: 26 in pos: 1
-items consumed: 99 in pos: 0
-items consumed: 26 in pos: 1
-items produced: 4 in pos: 0
-items produced: 80 in pos: 1
-items consumed: 4 in pos: 0
-items produced: 1 in pos: 0
-items consumed: 80 in pos: 1
-items consumed: 1 in pos: 0
-items produced: 35 in pos: 1
+item produced: 52 in pos: 0
+item consumed: 52 in pos: 0
+item produced: 84 in pos: 1
+item produced: 49 in pos: 0
+item consumed: 84 in pos: 1
+item consumed: 49 in pos: 0
+item produced: 20 in pos: 1
+item consumed: 20 in pos: 1
+item produced: 99 in pos: 0
+item produced: 26 in pos: 1
+item consumed: 99 in pos: 0
+item consumed: 26 in pos: 1
+item produced: 4 in pos: 0
+item produced: 80 in pos: 1
+item consumed: 4 in pos: 0
+item produced: 1 in pos: 0
+item consumed: 80 in pos: 1
+item consumed: 1 in pos: 0
+item produced: 35 in pos: 1
 -PRODUCER PROCESS ENDED-
-items consumed: 35 in pos: 1
+item consumed: 35 in pos: 1
 -CONSUMER PROCESS ENDED-
 ```
 

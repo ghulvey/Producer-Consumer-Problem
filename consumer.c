@@ -42,7 +42,7 @@ int main() {
         sleep(rand()%3);
         // Read integers from shared memory and caluclate the sum
         //int result = share->buffer[0] + share->buffer[1];
-        printf("items consumed: %d in pos: %d\n", share->buffer[share->out], share->out);
+        printf("item consumed: %d in pos: %d\n", share->buffer[share->out], share->out);
 
         share->out = (share->out+1)%bufferSize; // Goes back to zero when max size is reached
         

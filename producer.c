@@ -44,7 +44,7 @@ int main() {
         // Store random integers in shared memory
         share->buffer[share->in] = rand() % 100;
 
-        printf("items produced: %d in pos: %d\n", share->buffer[share->in], share->in);
+        printf("item produced: %d in pos: %d\n", share->buffer[share->in], share->in);
 
         share->in = (share->in+1)%bufferSize; // Goes back to zero when max size is reached
 

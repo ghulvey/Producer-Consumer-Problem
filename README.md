@@ -31,27 +31,27 @@ Run one of the following commands based on your needs
 ## Sample Output
 
 ```
--CONSUMER PROCESS STARTED-
-
 -PRODUCER PROCESS STARTED-
-items produced: 77 in pos: 0
-items produced: 35 in pos: 1
-items consumed: 77 in pos: 0
+
+-CONSUMER PROCESS STARTED-
+items produced: 52 in pos: 0
+items consumed: 52 in pos: 0
+items produced: 84 in pos: 1
 items produced: 49 in pos: 0
-items consumed: 35 in pos: 1
-items produced: 27 in pos: 1
+items consumed: 84 in pos: 1
 items consumed: 49 in pos: 0
-items produced: 63 in pos: 0
-items consumed: 27 in pos: 1
+items produced: 20 in pos: 1
+items consumed: 20 in pos: 1
+items produced: 99 in pos: 0
 items produced: 26 in pos: 1
-items consumed: 63 in pos: 0
-items produced: 11 in pos: 0
+items consumed: 99 in pos: 0
 items consumed: 26 in pos: 1
-items consumed: 11 in pos: 0
-items produced: 29 in pos: 1
-items produced: 62 in pos: 0
-items consumed: 29 in pos: 1
-items consumed: 62 in pos: 0
+items produced: 4 in pos: 0
+items produced: 80 in pos: 1
+items consumed: 4 in pos: 0
+items produced: 1 in pos: 0
+items consumed: 80 in pos: 1
+items consumed: 1 in pos: 0
 items produced: 35 in pos: 1
 -PRODUCER PROCESS ENDED-
 items consumed: 35 in pos: 1
@@ -65,6 +65,17 @@ Note that `sleep(rand()%x)` was called in both process inside and outside of the
 ### Shared Memory
 
 Each process opens a shared memory object of the same name and size specified in the header file `sharedObj.h`. The shared memory is mapped to a `struct table` which has a buffer and the location of the next position to be produced to or consumed from. 
+
+```
+// Create a shared memory object with name
+int fd = shm_open(NAME, O_CREAT | O_RDWR, 0666);
+    
+// Set size of shared memory object
+ftruncate(fd, SIZE);
+    
+// Open and map shared memory object 
+struct table *share = mmap(0, SIZE, PROT_WRITE | PROT_READ, MAP_SHARED, fd, 0);
+```
 
 ### Semaphores
 

@@ -8,7 +8,16 @@
 
 ## Run Instructions
 
-The producer and consumer processes can be started in one of two ways, via gcc or Make
+This project can be dowloaded using git. The producer and consumer processes can be started in one of two ways, via gcc or Make
+
+### Cloning the Repository
+
+Run the following commands after changing to your desired directory to store the repository. Note: the name `Producer-Consumer-Problem` can be changed to any name of your choosing, this will be the folder where the repository will be contained.
+
+```
+git clone https://github.com/ghulvey/Producer-Consumer-Problem.git Producer-Consumer-Problem
+cd Producer-Consumer-Problem
+```
 
 ### Starting with gcc
 
